@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+
+	"example.com/go-web/gee"
 )
 
 
@@ -41,5 +43,8 @@ func (engine *Engine) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 
 func main() {
 	engine := new(Engine)
+
+	gee.Hello()
+
 	log.Fatal(http.ListenAndServe(":9999", engine))
 }
