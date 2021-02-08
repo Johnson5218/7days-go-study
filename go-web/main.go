@@ -1,50 +1,27 @@
 package main
 
 import (
-	"fmt"
-	"log"
 	"net/http"
 
 	"example.com/go-web/gee"
 )
 
-
-// handle echoes r.URL.PATH
-func indexHandler(w http.ResponseWriter, req *http.Request) {
-	fmt.Fprintf(w, "URL.PATH = %q\n", req.URL.Path)
-}
-
-func helloHandler(w http.ResponseWriter, req *http.Request) {
-	for k, v := range req.Header {
-		fmt.Fprintf(w, "Header[%q] = %q\n", k, v)
-	}
-}
-
-//func main() {
-//	http.HandleFunc("/", indexHandler)
-//	http.HandleFunc("/hello", helloHandler)
-//	log.Fatal(http.ListenAndServe(":9999", nil))
-//}
-
-type Engine struct{}
-
-func (engine *Engine) ServeHTTP(w http.ResponseWriter, req *http.Request) {
-	switch req.URL.Path {
-	case "/":
-		fmt.Fprintf(w, "URL.PATH = %q\n", req.URL.Path)
-	case "/hello":
-		for k, v := range req.Header {
-			fmt.Fprintf(w, "Header[%q] = %q\n", k, v)
-		}
-	default:
-		fmt.Fprintf(w, "404 NOT FOUND: %s\n", req.URL)
-	}
-}
-
 func main() {
-	engine := new(Engine)
+	r := gee.New()
+	r.GET("/", func(c *gee.Context) {
+		c.HTML(http.StatusOK, "<h1>Hello World</h1>")
+	})
 
-	gee.Hello()
+	r.GET("/hello", func(c *gee.Context) {
+		c.String(http.StatusOK, "hello %s, you're at %s\n", c.Query("name"), c.Path)
+	})
 
-	log.Fatal(http.ListenAndServe(":9999", engine))
+	r.POST("/login", func(c *gee.Context) {
+		c.JSON(http.StatusOK, gee.H{
+			"username": c.PostForm("username"),
+			"password": c.PostForm("password"),
+		})
+	})
+
+	r.Run(":9999")
 }
