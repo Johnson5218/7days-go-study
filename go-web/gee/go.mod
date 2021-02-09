@@ -1,3 +1,3 @@
-module example.com/go-web/gee
+module gee
 
 go 1.14
