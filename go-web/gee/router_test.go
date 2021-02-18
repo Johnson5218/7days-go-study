@@ -28,7 +28,6 @@ func TestParsePattern(t *testing.T) {
 func TestGetRoute(t *testing.T) {
 	r := newTestRouter()
 	n, ps := r.getRoute("GET", "/hello/zx")
-
 	if n == nil {
 		t.Fatal("nil shouldn't be returned")
 	}

@@ -3,7 +3,7 @@ package main
 import (
 	"net/http"
 
-	"golang.org/x/gee"
+	"github.com/Johnson5218/7days-go-study/go-web/gee"
 )
 
 func main() {
